@@ -3,9 +3,11 @@
   hosts: webservers
   become: true
   vars:
-    group_code: "05" # УКАЖИ СВОЙ НОМЕР ГРУППЫ
-    repo_url: "https://github.com/ВАШ_АККАУНТ/ВАШ_РЕПОЗИТОРИЙ.git" # ТВОЯ ССЫЛКА
+    # --- НАСТРОЙКИ КОМАНДЫ ---
+    group_code: "09" # Укажите ваш двухзначный код группы (например, "03")
+    repo_url: "https://github.com/louratea/team09.git"
     repo_branch: "main"
+
     repo_root: "/opt/project_{{ group_code }}"
     old_service_name: "project_{{ group_code }}-backend.service"
     old_nginx_conf: "project_{{ group_code }}.conf"
@@ -16,7 +18,7 @@
         name: "{{ old_service_name }}"
         state: stopped
         enabled: false
-      failed_when: false
+      failed_when: false # Игнорировать ошибку, если служба уже удалена или отсутствует
 
     - name: 2. Удалить старый конфигурационный файл Nginx на хосте
       ansible.builtin.file:
