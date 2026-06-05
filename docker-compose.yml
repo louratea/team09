@@ -43,10 +43,39 @@ services:
     networks:
       - project_09-network
 
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: project_09-prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - promdata_09:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    ports:
+      - "9009:9090"
+    depends_on:
+      - backend
+    networks:
+      - project_09-network
+
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: project_09-grafana
+    ports:
+      - "3009:3000"
+    volumes:
+      - grafanadata_09:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - project_09-network
+
 volumes:
   pgdata_09:
+  promdata_09:
+  grafanadata_09:
 
 networks:
   project_09-network:
     name: project_09-network
-

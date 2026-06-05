@@ -1,3 +1,4 @@
+from prometheus_flask_exporter import PrometheusMetrics
 import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -5,6 +6,9 @@ import psycopg2
 
 app = Flask(__name__)
 CORS(app)
+
+metrics = PrometheusMetrics(app, path='/api/metrics')
+metrics.info('app_info', 'Application info', version='1.0.0')
 
 # Настройки подключения динамически считываются из окружения или используют дефолты
 DB_HOST = os.getenv("DB_HOST", "localhost")
@@ -64,6 +68,9 @@ def add_note():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
