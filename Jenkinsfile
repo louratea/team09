@@ -18,11 +18,12 @@ pipeline {
 
         stage('Docker Deploy') {
             steps {
-                echo 'Перезапускаем контейнеры команды project_GG...'
+                echo 'Перезапускаем контейнеры команды project_09...'
                 // Явно указываем имя проекта через -p, чтобы перетереть прошлый деплой
-                sh 'docker compose -p project_GG down'
-                sh 'docker compose -p project_GG up -d --build'
+                sh 'docker compose -p project_09 down'
+                sh 'docker compose -p project_09 up -d --build'
             }
         }
     }
 }
+
